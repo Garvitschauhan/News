@@ -1,0 +1,117 @@
+import nltk
+nltk.download('punkt')
+from newspaper import Article
+
+print("Select Site.")
+print("1.Times of India")
+print("2.Indian Express")
+print("3.CNN News")
+print("4.BBC News")
+while True:
+    # take input from the user
+    choice = input("Enter choice(1/2/3/4): ")
+
+    # check if choice is one of the four options
+    if choice in ('1', '2', '3', '4'):
+        
+        if choice == '1':
+            url= 'https://timesofindia.indiatimes.com'
+            # create an article object
+            article = Article(url)
+            article.download()
+            article.parse()
+            article.nlp()
+
+            title = article.title
+            link = article.url
+            authors = article.authors
+            date = article.publish_date
+            image = article.top_image
+            summary = article.summary
+            text = article.text
+
+            print('**********************************')
+            print(f'Title: {title}')
+            print(f'Link: {link}')
+            print(f'Publish Date: {date}')
+            print(f'Summary: ')
+            print(summary)
+            print('**********************************')
+        elif choice == '2':
+            url= 'https://indianexpress.com'
+            # create an article object
+            article = Article(url)
+            article.download()
+            article.parse()
+            article.nlp()
+
+            title = article.title
+            link = article.url
+            authors = article.authors
+            date = article.publish_date
+            image = article.top_image
+            summary = article.summary
+            text = article.text
+
+            print('**********************************')
+            print(f'Title: {title}')
+            print(f'Link: {link}')
+            print(f'Publish Date: {date}')
+            print(f'Summary: ')
+            print(summary)
+            print('**********************************')
+        elif choice == '3':
+            url= 'https://edition.cnn.com'
+            # create an article object
+            article = Article(url)
+            article.download()
+            article.parse()
+            article.nlp()
+
+            title = article.title
+            link = article.url
+            authors = article.authors
+            date = article.publish_date
+            image = article.top_image
+            summary = article.summary
+            text = article.text
+
+            print('**********************************')
+            print(f'Title: {title}')
+            print(f'Link: {link}')
+            print(f'Publish Date: {date}')
+            print(f'Summary: ')
+            print(summary)
+            print('**********************************')
+
+        elif choice == '4':
+            url= 'https://www.bbc.com'
+            # create an article object
+            article = Article(url)
+            article.download()
+            article.parse()
+            article.nlp()
+
+            title = article.title
+            link = article.url
+            authors = article.authors
+            date = article.publish_date
+            image = article.top_image
+            summary = article.summary
+            text = article.text
+
+            print('**********************************')
+            print(f'Title: {title}')
+            print(f'Link: {link}')
+            print(f'Publish Date: {date}')
+            print(f'Summary: ')
+            print(summary)
+            print('**********************************')
+        
+        # check if user wants another calculation
+        # break the while loop if answer is no
+        next_calculation = input(" Want to have another go (yes/no): ")
+        if next_calculation == "no":
+          break
+    else:
+        print("Invalid Input")
