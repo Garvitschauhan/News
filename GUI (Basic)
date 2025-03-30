@@ -1,0 +1,70 @@
+import nltk
+import tkinter as tk
+from tkinter import messagebox, scrolledtext, ttk
+from newspaper import Article
+import threading
+from ttkthemes import ThemedTk
+
+nltk.download('punkt')
+
+def fetch_news(url):
+    try:
+        article = Article(url)
+        article.download()
+        article.parse()
+        article.nlp()
+        
+        result_text.config(state=tk.NORMAL)
+        result_text.delete('1.0', tk.END)
+        result_text.insert(tk.END, f"Title: {article.title}\n\n", "title")
+        result_text.insert(tk.END, f"Link: {article.url}\n\n", "link")
+        result_text.insert(tk.END, f"Publish Date: {article.publish_date}\n\n", "date")
+        result_text.insert(tk.END, f"Summary:\n{article.summary}\n\n", "summary")
+        result_text.insert(tk.END, f"Full Text:\n{article.text}\n", "text")
+        result_text.config(state=tk.DISABLED)
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to fetch news: {str(e)}")
+
+def on_fetch():
+    threading.Thread(target=fetch_news, args=(news_sources[selected_news.get()],), daemon=True).start()
+
+# Initialize futuristic main window
+root = ThemedTk(theme="plastik")
+root.title("News Scraper")
+root.geometry("900x650")
+root.configure(bg="#1e1e1e")
+
+# Custom Styling
+style = ttk.Style()
+style.configure("TButton", font=("Arial", 12), padding=10)
+style.configure("TLabel", font=("Arial", 12), background="#1e1e1e", foreground="gray")
+
+# Dropdown menu for selecting news source
+news_sources = {
+    "Times of India": "https://timesofindia.indiatimes.com",
+    "Indian Express": "https://indianexpress.com",
+    "CNN News": "https://edition.cnn.com",
+    "BBC News": "https://www.bbc.com"
+}
+
+ttk.Label(root, text="Select News Source:").pack(pady=10)
+selected_news = tk.StringVar()
+selected_news.set("Indian Express")  
+
+dropdown = ttk.Combobox(root, textvariable=selected_news, values=list(news_sources.keys()), state="readonly")
+dropdown.pack()
+
+ttk.Button(root, text="Fetch News", command=on_fetch).pack(pady=10)
+
+# ScrolledText widget to display news
+result_text = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=100, height=30, font=("Arial", 10), bg="#151515", fg="gray")
+result_text.pack(pady=10)
+result_text.tag_config("title", font=("Arial", 14, "bold"), foreground="#4CAF50")
+result_text.tag_config("link", font=("Arial", 12, "italic"), foreground="#1E90FF")
+result_text.tag_config("date", font=("Arial", 12), foreground="#FF8C00")
+result_text.tag_config("summary", font=("Arial", 12), foreground="#CCCCCC")
+result_text.tag_config("text", font=("Arial", 10), foreground="#AAAAAA")
+result_text.config(state=tk.DISABLED)
+
+# Run the UI
+root.mainloop()
